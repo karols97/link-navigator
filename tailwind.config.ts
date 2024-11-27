@@ -22,6 +22,9 @@ export default {
         "border-purple": "#9747FF",
         "background-secondary": "#F9FAFB",
       },
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
     },
   },
   plugins: [],
