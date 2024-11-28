@@ -17,6 +17,7 @@ export default {
         "text-secondary": "#344054",
         "text-tertiary": "#475467",
         "text-purple": "#6941C6",
+        "text-placeholder": "#667085",
         "border-primary": "#D0D5DD",
         "border-secondary": "#EAECF0",
         "border-purple": "#9747FF",
@@ -24,6 +25,9 @@ export default {
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
+      },
+      grayscale: {
+        50: "50%",
       },
     },
   },
