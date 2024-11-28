@@ -37,7 +37,7 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`flex flex-row border items-center justify-center gap-2 rounded-md px-[14px] py-[10px] text-sm font-semibold
+      className={`flex flex-row border items-center justify-center gap-2 rounded-lg px-[14px] py-[10px] text-sm font-semibold
         ${disabled ? "cursor-not-allowed bg-opacity-50" : ""}
         ${colors[color]} 
         ${className}`}

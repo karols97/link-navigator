@@ -1,27 +1,14 @@
 "use client";
-import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
-import React, { useState } from "react";
-import { GoPlusCircle } from "react-icons/go";
-import { CiSearch } from "react-icons/ci";
+import EmptyMenuLayout from "@/components/EmptyMenuLayout";
+import AddLinkForm from "@/components/AddLinkForm";
+import LinkList from "@/components/LinkList";
 
 const LinkNavigator = () => {
-  const [value, setValue] = useState<string>("");
   return (
-    <div className="">
-      <Button>Anuluj</Button>
-      <Button color="lightPurple">Dodaj</Button>
-      <Button color="fullPurple">
-        <GoPlusCircle size={20} /> Dodaj pozycję menu
-      </Button>
-      <Input
-        id="nazwa"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="np. Promocje"
-        label="Nazwa">
-        <CiSearch></CiSearch>
-      </Input>
+    <div className="flex flex-col gap-6">
+      <EmptyMenuLayout />
+      <AddLinkForm />
+      <LinkList />
     </div>
   );
 };

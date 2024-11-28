@@ -1,8 +1,8 @@
-import React, { HTMLInputTypeAttribute, ReactNode, forwardRef } from "react";
+import React, { HTMLInputTypeAttribute, forwardRef } from "react";
+import { IconType } from "react-icons";
 
 type InputProps = {
   label?: string;
-  children?: ReactNode;
   id: string;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
@@ -10,19 +10,20 @@ type InputProps = {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   className?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  icon?: IconType;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       label,
-      children,
       id,
       placeholder,
       type,
       value,
       onChange,
       className,
+      icon: Icon,
       ...inputProps
     }: InputProps,
     ref
@@ -31,19 +32,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className="flex flex-col w-full">
-        <label className="text-sm text-text-secondary py-2 font-medium" htmlFor={id}>
+        <label className="text-sm text-text-secondary pb-2 font-medium" htmlFor={id}>
           {label}
         </label>
-        <div className="relative flex flex-row">
-          <div className="absolute px-3 h-full w-full flex items-center justify-between text-text-placeholder pointer-events-none">
-            {children}
+        <div className="relative">
+          <div className="absolute px-3.5 h-full w-full flex items-center justify-between text-text-placeholder pointer-events-none">
+            {Icon && <Icon size={20}></Icon>}
           </div>
           <input
             ref={ref}
             id={id}
             placeholder={placeholder}
             className={`
-              w-full font-normal h-10 text-text-placeholder border border-border-primary hover:border-gray-400 py-1 pl-10 rounded-lg active:border focus:ring-0 focus:outline-0 focus:border-gray-400 ${className}`}
+              flex flex-col w-full items-center font-normal h-10 text-base text-text-placeholder border border-border-primary hover:border-gray-400 py-2 px-3.5 ${
+                Icon ? "pl-10" : ""
+              } rounded-lg active:border focus:ring-0 focus:outline-0 focus:border-gray-400 ${className}`}
             type={type}
             value={value}
             onChange={onChange}

@@ -21,6 +21,7 @@ export default {
         "border-primary": "#D0D5DD",
         "border-secondary": "#EAECF0",
         "border-purple": "#9747FF",
+        "background-primary": "#FFFFFF",
         "background-secondary": "#F9FAFB",
       },
       fontFamily: {
