@@ -1,6 +1,6 @@
-export type Link = {
+export type LinkType = {
   id: string;
   name: string;
   url: string;
-  sublinks: Link[];
+  sublinks: LinkType[];
 };

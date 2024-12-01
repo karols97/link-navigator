@@ -1,40 +1,70 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Input } from "./Input";
 import Image from "next/image";
 import { Button } from "./Button";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link } from "@/types";
-import { addLink } from "@/state/links/linksSlice";
+import { addLink, addSublink, editLink } from "@/state/links/linksSlice";
+import { LinkType } from "@/types";
 
 type InputData = {
   name: "string";
   link: "string";
 };
 
-const AddLinkForm = () => {
+type AddLinkFormProps = {
+  level?: number;
+  setIsGeneralFormVisible: (arg: boolean) => void;
+  setIsFormVisible: (arg: string) => void;
+  setIsInEditMode: (arg: LinkType | null) => void;
+  sublinkOf?: LinkType;
+  editModeOf?: LinkType;
+  className?: string;
+};
+
+export const AddLinkForm = ({
+  level,
+  setIsFormVisible,
+  setIsGeneralFormVisible,
+  setIsInEditMode,
+  sublinkOf,
+  editModeOf,
+  className,
+}: AddLinkFormProps) => {
   const [name, setName] = useState<string>("");
   const [link, setLink] = useState<string>("");
-
+  useEffect(() => {
+    setName(editModeOf?.name || "");
+    setLink(editModeOf?.url || "");
+  }, [editModeOf]);
   const dispatch = useDispatch();
-
   const { handleSubmit, register } = useForm<InputData>();
 
   const onSubmit = (data: InputData) => {
-    const newLink: Link = {
+    const newLink: LinkType = {
       id: self.crypto.randomUUID(),
       name: data.name,
       url: data.link,
       sublinks: [],
     };
-    dispatch(addLink(newLink));
-    console.log(newLink);
+    if (!editModeOf) {
+      if (level === 0) {
+        dispatch(addLink(newLink));
+      } else {
+        dispatch(addSublink([sublinkOf?.id, newLink]));
+      }
+    }
+    dispatch(editLink([editModeOf?.id, name, link]));
+
+    setIsFormVisible("");
+    setIsGeneralFormVisible(false);
+    setIsInEditMode(null);
   };
 
   return (
     <form
-      className="flex flex-col border border-border-primary bg-background-primary p-5 gap-5 rounded-lg"
+      className={`flex flex-col border border-border-primary bg-background-primary p-5 gap-5 rounded-lg ${className}`}
       onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row gap-4">
         <div className="flex flex-col w-full gap-2">
@@ -64,13 +94,18 @@ const AddLinkForm = () => {
         </Button>
       </div>
       <div className="flex flex-row gap-2">
-        <Button>Anuluj</Button>
+        <Button
+          onClick={() => {
+            setIsFormVisible("");
+            setIsGeneralFormVisible(false);
+            setIsInEditMode(null);
+          }}>
+          Anuluj
+        </Button>
         <Button color="lightPurple" type="submit">
-          Dodaj
+          {editModeOf ? "Zapisz edycję" : "Dodaj"}
         </Button>
       </div>
     </form>
   );
 };
-
-export default AddLinkForm;

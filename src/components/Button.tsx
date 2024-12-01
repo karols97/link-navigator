@@ -2,12 +2,6 @@
 
 import React, { ReactNode } from "react";
 
-export type ButtonType = {
-  gray: "bg-transparent border border-border-secondary text-text-secondary";
-  lightPurple: "bg-transparent border border-purple-secondary text-text-purple";
-  fullPuple: "bg-purple-primary border border-purple-primary text-white";
-};
-
 type ButtonProps = {
   children: ReactNode;
   className?: string;
@@ -26,14 +20,6 @@ export const Button = ({
   disabled,
   color = "gray",
 }: ButtonProps) => {
-  const colors: Record<"gray" | "lightPurple" | "fullPurple", string> = {
-    gray: "bg-white border border-border-secondary text-text-secondary hover:bg-border-secondary",
-    lightPurple:
-      "bg-white border border-purple-secondary text-text-purple hover:bg-purple-secondary",
-    fullPurple:
-      "bg-purple-primary border border-purple-primary text-white hover:bg-violet-700 hover:border-violet-700",
-  };
-
   return (
     <button
       onClick={onClick}
@@ -46,4 +32,11 @@ export const Button = ({
       {children}
     </button>
   );
+};
+
+const colors: Record<"gray" | "lightPurple" | "fullPurple", string> = {
+  gray: "bg-white border border-border-secondary text-text-secondary hover:bg-border-secondary",
+  lightPurple: "bg-white border border-purple-secondary text-text-purple hover:bg-purple-secondary",
+  fullPurple:
+    "bg-purple-primary border border-purple-primary text-white hover:bg-violet-700 hover:border-violet-700",
 };

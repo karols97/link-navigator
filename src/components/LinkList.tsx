@@ -1,23 +1,38 @@
 import React from "react";
 import { Button } from "./Button";
-import Link from "./Link";
-import { useSelector } from "react-redux";
-import { RootState } from "@/state/store";
+import { LinkType } from "@/types";
+import { List } from "./List";
+import { AddLinkForm } from "./AddLinkForm";
 
-const LinkList = () => {
-  const links = useSelector((state: RootState) => state.links.links);
+type LinkListProps = {
+  links: LinkType[];
+  setIsGeneralFormVisible: (arg: boolean) => void;
+  isGeneralFormVisible: boolean;
+};
+
+export const LinkList = ({
+  links,
+  setIsGeneralFormVisible,
+  isGeneralFormVisible,
+}: LinkListProps) => {
   return (
-    <div className="flex flex-col w-full border border-border-primary rounded-lg divide-y">
-      <div className="divide-y">
-        {links.map((singleLink) => {
-          return <Link key={singleLink.id} name={singleLink.name} url={singleLink.url} />;
-        })}
+    <div className="bg-background-secondary rounded-lg">
+      <div className="flex flex-col w-full border border-border-primary bg-background-primary rounded-lg">
+        <List links={links} />
+        {isGeneralFormVisible && (
+          <div className="py-4 px-6 bg-background-secondary">
+            <AddLinkForm
+              level={0}
+              setIsFormVisible={() => null}
+              setIsGeneralFormVisible={setIsGeneralFormVisible}
+              setIsInEditMode={() => null}
+            />
+          </div>
+        )}
+        <footer className="py-5 px-6 border-t -mt-[0.05rem]">
+          <Button onClick={() => setIsGeneralFormVisible(true)}>Dodaj pozycję menu</Button>
+        </footer>
       </div>
-      <footer className="py-5 px-6">
-        <Button>Dodaj pozycję menu</Button>
-      </footer>
     </div>
   );
 };
-
-export default LinkList;
