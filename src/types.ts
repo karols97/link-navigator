@@ -4,3 +4,11 @@ export type LinkType = {
   url: string;
   sublinks: LinkType[];
 };
+
+export type FlattenedLink = {
+  id: string;
+  parentId: string | null;
+  depth: number;
+  name: string;
+  url: string;
+};

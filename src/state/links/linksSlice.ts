@@ -80,9 +80,12 @@ const linksSlice = createSlice({
         action.payload[2]
       );
     },
+    updateLinks: (state, action) => {
+      state.links = action.payload;
+    },
   },
 });
 
-export const { addLink, removeLink, addSublink, editLink } = linksSlice.actions;
+export const { addLink, removeLink, addSublink, editLink, updateLinks } = linksSlice.actions;
 
 export default linksSlice.reducer;
