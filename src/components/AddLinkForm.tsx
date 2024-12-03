@@ -39,7 +39,14 @@ export const AddLinkForm = ({
     setLink(editModeOf?.url || "");
   }, [editModeOf]);
   const dispatch = useDispatch();
-  const { handleSubmit, register } = useForm<InputData>();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    clearErrors,
+  } = useForm<InputData>({
+    mode: "onBlur",
+  });
 
   const onSubmit = (data: InputData) => {
     const newLink: LinkType = {
@@ -67,22 +74,48 @@ export const AddLinkForm = ({
       className={`flex flex-col border border-border-primary bg-background-primary p-5 gap-5 rounded-lg ${className}`}
       onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row gap-4">
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full">
           <Input
-            {...register("name")}
+            {...register("name", {
+              required: "Name is required!",
+            })}
             id="nazwa"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              clearErrors("name");
+            }}
             placeholder="np. Promocje"
-            label="Nazwa"></Input>
+            label="Nazwa"
+            className={
+              errors.name && "border-red-500 focus:border-red-500 hover:border-red-500"
+            }></Input>
+          {errors.name ? (
+            <p className="text-xs text-red-500">{errors.name.message}</p>
+          ) : (
+            <p className="h-3 w-full"></p>
+          )}
           <Input
-            {...register("link")}
+            {...register("link", {
+              required: "Link is required!",
+            })}
             id="link"
             value={link}
-            onChange={(e) => setLink(e.target.value)}
+            onChange={(e) => {
+              setLink(e.target.value);
+              clearErrors("link");
+            }}
             placeholder="Wklej lub wyszukaj"
             label="Link"
-            icon={CiSearch}></Input>
+            icon={CiSearch}
+            className={
+              errors.link && "border-red-500 focus:border-red-500 hover:border-red-500"
+            }></Input>
+          {errors.link ? (
+            <p className="text-xs text-red-500">{errors.link.message}</p>
+          ) : (
+            <div className="p-3"></div>
+          )}
         </div>
         <Button
           className="h-8 px-2 py-2 border-0"
