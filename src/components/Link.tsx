@@ -7,20 +7,15 @@ import { removeLink } from "@/state/links/linksSlice";
 import { useDispatch } from "react-redux";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-// import { FlattenedLink } from "./List";
-// import { useDraggable, useDroppable } from "@dnd-kit/core";
 
 type LinkProps = {
   link: LinkType;
-  level: number;
   setIsFormVisible: (arg: string) => void;
   setIsInEditMode: (arg: LinkType | null) => void;
   className?: string;
 };
 
-const Link = ({ link, level, setIsFormVisible, setIsInEditMode, className }: LinkProps) => {
-  // const { setNodeRef: dropRef } = useDroppable({ id: link.id });
-  // const { attributes, listeners, setNodeRef: dragRef, transform } = useDraggable({ id: link.id });
+const Link = ({ link, setIsFormVisible, setIsInEditMode, className }: LinkProps) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: link.id,
   });
@@ -29,18 +24,24 @@ const Link = ({ link, level, setIsFormVisible, setIsInEditMode, className }: Lin
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    marginLeft: `${level * 16}px`, // Indent based on depth
-    opacity: isDragging ? 0.5 : 1, // Visual feedback for dragging
+    opacity: isDragging ? 0.5 : 1,
     cursor: "grab",
+    border: isDragging ? "2px dashed #9747FF" : "",
+    borderRadius: isDragging ? "8px" : "",
   };
   return (
-    <div className="flex flex-col" ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div className="flex flex-col" ref={setNodeRef} {...attributes} {...listeners}>
       <div
+        style={style}
         className={`flex flex-row w-full items-center gap-1 justify-between px-6 py-4 border-b bg-background-primary ${className}`}>
         <div className="flex flex-row items-center">
-          <Button className="h-8 px-2 py-2 border-0">
-            <Image alt="bin icon" src={"/icons/DragAndDrop.svg"} width={20} height={20}></Image>
-          </Button>
+          <div className="h-8 px-2 py-2 border-0">
+            <Image
+              alt="drag and drop icon"
+              src={"/icons/DragAndDrop.svg"}
+              width={20}
+              height={20}></Image>
+          </div>
           <div className="flex flex-col gap-1.5">
             <h1 className="text-sm font-semibold text-text-primary">{link.name}</h1>
             <h2 className="text-sm text-text-tertiary">{link.url}</h2>

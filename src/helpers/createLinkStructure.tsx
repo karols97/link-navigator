@@ -19,26 +19,21 @@ const assignSublink = (
 };
 
 export const createLinkStructure = (flattenedLinks: FlattenedLink[]) => {
+  flattenedLinks.sort((a, b) => a.depth - b.depth);
   const linksStructured: LinkType[] = [];
   flattenedLinks.map((singleFlattenedLink) => {
-    if (singleFlattenedLink.depth === 0) {
-      const link: LinkType = {
-        id: singleFlattenedLink.id,
-        name: singleFlattenedLink.name,
-        url: singleFlattenedLink.url,
-        sublinks: [],
-      };
-      linksStructured.push(link);
-    } else {
-      const sublink: LinkType = {
-        id: singleFlattenedLink.id,
-        name: singleFlattenedLink.name,
-        url: singleFlattenedLink.url,
-        sublinks: [],
-      };
+    const link: LinkType = {
+      id: singleFlattenedLink.id,
+      name: singleFlattenedLink.name,
+      url: singleFlattenedLink.url,
+      sublinks: [],
+    };
+    if (singleFlattenedLink.depth > 0) {
       linksStructured.map((singleLinkStructured) => {
-        assignSublink(singleLinkStructured, singleFlattenedLink, sublink);
+        assignSublink(singleLinkStructured, singleFlattenedLink, link);
       });
+    } else {
+      linksStructured.push(link);
     }
   });
   return linksStructured;

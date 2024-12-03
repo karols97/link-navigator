@@ -47,7 +47,6 @@ export const List = ({ links, level = 0 }: ListProps) => {
               <Link
                 key={singleLink.id}
                 link={singleLink}
-                level={level}
                 setIsFormVisible={setIsFormVisible}
                 setIsInEditMode={setIsInEditMode}
                 className={`border-border-secondary
@@ -88,7 +87,6 @@ export const List = ({ links, level = 0 }: ListProps) => {
           </div>
         );
       })}
-      {/* </DndContext> */}
     </div>
   );
 };

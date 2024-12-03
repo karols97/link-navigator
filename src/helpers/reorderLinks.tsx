@@ -1,13 +1,16 @@
 import { FlattenedLink, LinkType } from "@/types";
 import { createLinkStructure } from "./createLinkStructure";
+import { Active, Over } from "@dnd-kit/core";
+import { Coordinates } from "@dnd-kit/utilities";
 
 export const reorderLinks = (
   flattenedLinks: FlattenedLink[],
-  activeId: string,
-  overId: string
+  active: Active,
+  over: Over,
+  delta: Coordinates
 ): LinkType[] => {
-  const activeIndex = flattenedLinks.findIndex((link) => link.id === activeId);
-  const overIndex = flattenedLinks.findIndex((link) => link.id === overId);
+  const activeIndex = flattenedLinks.findIndex((link) => link.id === active.id);
+  const overIndex = flattenedLinks.findIndex((link) => link.id === over.id);
 
   if (activeIndex === -1 || overIndex === -1) return createLinkStructure(flattenedLinks);
 
@@ -15,7 +18,7 @@ export const reorderLinks = (
   const overLink = flattenedLinks[overIndex];
 
   //wyciąganie w góre
-  if (activeLink.id === overLink.id && activeLink.depth > 0) {
+  if (activeLink.id === overLink.id && activeLink.depth > 0 && delta.x < -50) {
     activeLink.depth -= 1;
     if (activeLink.depth === 0) {
       activeLink.parentId = null;
@@ -24,24 +27,25 @@ export const reorderLinks = (
     }
   }
 
+  //dodanie jako sublink
+  if (activeLink.depth >= overLink.depth && delta.x > 50) {
+    flattenedLinks.splice(activeIndex, 1);
+    const newParentId =
+      activeLink.id === overLink.id ? flattenedLinks[activeIndex - 1].id : overLink.id;
+    const newSublink: FlattenedLink = {
+      id: activeLink.id,
+      name: activeLink.name,
+      url: activeLink.url,
+      parentId: newParentId,
+      depth: overLink.depth + 1,
+    };
+    flattenedLinks.splice(overIndex, 0, newSublink);
+  }
+
   //przesuwanie na tym samym poziomie
   if (activeLink.depth === overLink.depth && activeLink.id !== overLink.id) {
     const [movedLink] = flattenedLinks.splice(activeIndex, 1);
     flattenedLinks.splice(overIndex, 0, movedLink);
-  }
-
-  // Promote, demote, or reorder based on positions
-  if (overLink.depth < activeLink.depth) {
-    // Promote to parent level
-    activeLink.parentId = overLink.parentId;
-    activeLink.depth = overLink.depth;
-  } else if (overLink.depth > activeLink.depth) {
-    // Demote as child of overLink
-    activeLink.parentId = overLink.id;
-    activeLink.depth = overLink.depth + 1;
-  } else {
-    // Same level reorder
-    activeLink.parentId = overLink.parentId;
   }
 
   return createLinkStructure(flattenedLinks);
